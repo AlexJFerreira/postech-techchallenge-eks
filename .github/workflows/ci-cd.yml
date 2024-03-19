@@ -30,38 +30,38 @@ jobs:
         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile alex-ferreira-sam-developer
         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile alex-ferreira-sam-developer
 
-    - name: Terraform Init
+    - name: Terraform Init vpc
       run: terraform init
       working-directory: terraform/vpc
 
-    - name: Terraform Plan
+    - name: Terraform Plan vpc
       run: terraform plan
       working-directory: terraform/vpc
 
-    - name: Terraform Apply
+    - name: Terraform Apply vpc
       run: terraform apply -auto-approve
       working-directory: terraform/vpc
 
-    - name: Terraform Init
+    - name: Terraform Init eks
       run: terraform init
       working-directory: terraform/eks
 
-    - name: Terraform Plan
+    - name: Terraform Plan eks
       run: terraform plan
       working-directory: terraform/eks
 
-    - name: Terraform Apply
+    - name: Terraform Apply eks
       run: terraform apply -auto-approve
       working-directory: terraform/eks
 
-    - name: Terraform Init
+    - name: Terraform Init kubernetes
       run: terraform init
       working-directory: terraform/kubernetes
 
-    - name: Terraform Plan
+    - name: Terraform Plankubernetes
       run: terraform plan
       working-directory: terraform/kubernetes
 
-    - name: Terraform Apply
+    - name: Terraform Apply kubernetes
       run: terraform apply -auto-approve
       working-directory: terraform/kubernetes
