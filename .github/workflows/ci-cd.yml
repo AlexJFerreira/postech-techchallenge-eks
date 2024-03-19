@@ -1,0 +1,67 @@
+name: Deploy eks with Terraform
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: '${{ secrets.AWS_ACCESS_KEY_ID }}'
+        aws-secret-access-key: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+        aws-region: us-east-1
+
+    - name: Add profile credentials to ~/.aws/credentials
+      run: |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile alex-ferreira-sam-developer
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile alex-ferreira-sam-developer
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: terraform/vpc
+
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: terraform/vpc
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: terraform/vpc
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: terraform/eks
+
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: terraform/eks
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: terraform/eks
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: terraform/kubernetes
+
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: terraform/kubernetes
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      working-directory: terraform/kubernetes
